@@ -1,22 +1,3 @@
-# Space_Fighting
-
-A simple Game Made in Python using Pygame Library<br/>
-This Game is The Replica of The Arcade Game Space Invasion<br/>
-
-# Screenshots
-
-|MainScreen|Gameplay|Score Screen|Highscore|
-:-------:|:-------:|:-------:|:-----:
-<img src="https://github.com/Tushargupta9800/Space_Fighting/blob/master/Screenshots/screenshot1.PNG" height="330em" />|<img src="https://github.com/Tushargupta9800/Space_Fighting/blob/master/Screenshots/screenshot2.PNG" height="330em" />|<img src="https://github.com/Tushargupta9800/Space_Fighting/blob/master/Screenshots/screenshot3.PNG" height="330em" />|<img src="https://github.com/Tushargupta9800/Space_Fighting/blob/master/Screenshots/screenshot4.PNG" height="330em" />
-
-|Game History|
-:------:
-<img src="https://github.com/Tushargupta9800/Space_Fighting/blob/master/Screenshots/screenshot5.PNG" height="330em" />|
-
-
-### LICENSE
-
-```
 MIT License
 
 Copyright (c) 2020 Tushar Gupta
@@ -38,5 +19,3 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
-
-```
