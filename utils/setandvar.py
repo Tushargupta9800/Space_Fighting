@@ -1,6 +1,7 @@
 #by- Team Algoristy
 #Space Fighting game in python using pygame
 
+#this file contains all the settings and variables for the game
 #importing library
 import pygame
 import random
@@ -107,6 +108,7 @@ playerbullets = pygame.sprite.Group()
 powerups = pygame.sprite.Group()
 explosionsprite = pygame.sprite.Group()
 
+#other settings
 tilesize = 35
 score = 0
 play = False
