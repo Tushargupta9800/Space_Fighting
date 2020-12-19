@@ -1,6 +1,8 @@
 #by- Team Algoristy
 #Space Fighting game in python using pygame
 
+
+#importing libraries
 import pygame
 pygame.init()
 from random import randint
@@ -15,6 +17,7 @@ run = True
 score = 0
 music = 1
 
+#displaying menu
 def displaymenu():
     global player
     player = Player()
@@ -36,6 +39,7 @@ while loop:
         music = player.music
         run = True
 
+#Variables to initial value to play again
     run = True
     player.life = 3
     player.shield = 100
@@ -49,8 +53,10 @@ while loop:
     #game loop
     while run:
         keypressed = pygame.key.get_pressed()
+        #pausing the screen
         if keypressed[pygame.K_s]:
             pausethescreen()
+        #game end
         if keypressed[pygame.K_e]:
             music = player.music
             for bullet in playerbullets:
@@ -61,6 +67,7 @@ while loop:
                 makeenemy()
             run = False
         play = True
+        #player shield on
         if player.shieldon:
             for m in mob:
                 m.shieldon = False
@@ -68,11 +75,13 @@ while loop:
             for m in mob:
                 m.shieldon = True
         clock.tick(fps)
-        
+
+        #Handling pygame quit 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
 
+        #collision of mob with playerbullets
         hits = pygame.sprite.groupcollide(mob, playerbullets, True, True)
         for i in hits:
             if player.music == 1:
@@ -94,6 +103,7 @@ while loop:
             makeenemy()
             makeexplosion(i.rect.center, 'lg', '')
         win.blit(bk, (0,0))
+        #collision of player with enemy bullets
         if not player.shieldon:
             hits = pygame.sprite.spritecollide(player, enemybullets, True, pygame.sprite.collide_circle)
             for i in hits:
@@ -108,10 +118,12 @@ while loop:
                 player.shield -= 50
                 makeexplosion(i.rect.center, 'player', '-50')
 
+        #collision of playerbullets with powerups
         #hits = pygame.sprite.groupcollide(playerbullets, powerups, True,  True)
         #for i in hits:
         #    makeexplosion(i.rect.center, 'sm', 'OOPS!')
 
+        #collision of player with powerups
         hits = pygame.sprite.spritecollide(player, powerups, True, pygame.sprite.collide_circle)
         for i in hits:
             if player.music == 1:
@@ -152,6 +164,7 @@ while loop:
         pygame.display.flip()
         writeonscreen(str(score),width/2, 30, 30)
         writeonscreen("Score", width/2, 54, 25)
+        #handling player health
         if displayhealth(player.shield):
             music = player.music
             if player.music == 1:
