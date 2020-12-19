@@ -11,6 +11,7 @@ import random
 pygame.init()
 global music
 
+#player bullets sprite
 class Pbullet(pygame.sprite.Sprite):
     def __init__ (self, x, space):
         pygame.sprite.Sprite. __init__ (self)
@@ -26,6 +27,7 @@ class Pbullet(pygame.sprite.Sprite):
         if self.rect.top <= 0:
             self.kill()
 
+#player sprite
 class Player(pygame.sprite.Sprite):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
@@ -94,6 +96,7 @@ class Player(pygame.sprite.Sprite):
         writeonscreen('OOPS! You Died',width/2, height/2 - 50, 30)
         self.rect.x = 1000
 
+#enemy bullet sprites
 class Ebullet(pygame.sprite.Sprite):
     def __init__ (self, x):
         pygame.sprite.Sprite. __init__ (self)
@@ -108,6 +111,7 @@ class Ebullet(pygame.sprite.Sprite):
         if self.rect.top >= height:
             self.kill()
 
+#enemy sprite
 class Enemy(pygame.sprite.Sprite):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
@@ -144,6 +148,7 @@ class Enemy(pygame.sprite.Sprite):
             mob.add(a)
             all_sprites.add(a)
 
+#handling explosion sprite
 class Explosion(pygame.sprite.Sprite):
         def __init__(self, x, size, prin):
             pygame.sprite.Sprite.__init__(self)
@@ -164,6 +169,7 @@ class Explosion(pygame.sprite.Sprite):
                     self.kill()
                 self.image = explosion[self.size][self.frame]
 
+#handling powerups
 class Powerup(pygame.sprite.Sprite):
     def __init__ (self, center, text):
         pygame.sprite.Sprite. __init__ (self)
@@ -183,21 +189,25 @@ class Powerup(pygame.sprite.Sprite):
     def update(self):
         self.rect.y += self.speed
 
+#making a new enemy
 def makeenemy():
     a = Enemy()
     all_sprites.add(a)
     mob.add(a)
 
+#making explosions
 def makeexplosion(x, text, prin):
     a = Explosion(x, text, prin)
     all_sprites.add(a)
     explosionsprite.add(a)
 
+#droping powerups
 def drop(center, text):
     a = Powerup(center, text)
     all_sprites.add(a)
     powerups.add(a)
-        
+
+#printing the history of the game 
 def printhistory():
     wait = True
     ignite = pygame.time.get_ticks()
@@ -233,6 +243,7 @@ def printhistory():
         pygame.display.flip()
         pygame.display.update()
 
+#updating the score to the backend
 def updateScoreToBackend(score,data):
     special_characters = "{}[]|':\`~;.!@#$%^&*()-+?_=,<>/"
     isupdate = 0
@@ -289,6 +300,7 @@ def updateScoreToBackend(score,data):
     else:
         return True
 
+#displaying the world score
 def WorldScores(data):
     wait = True
     ignite = pygame.time.get_ticks()
@@ -316,7 +328,7 @@ def WorldScores(data):
         pygame.display.flip()
         pygame.display.update()
     
-        
+#showing menu
 def showmenu(score, play, player):
     didImadeAHighScore = 0
     fp = open("data/score.txt", "r")
@@ -335,6 +347,7 @@ def showmenu(score, play, player):
         win.blit(bk, (0,0))
         writeonscreen("Space Fighting", width/2, 40, 60)
         if play:
+            #if player made a highscore
             if high_score <= score:
                 fp = open("data/score.txt", "w+")
                 fp.truncate(0)
@@ -357,6 +370,7 @@ def showmenu(score, play, player):
                 text_rect.centery = 280
                 win.blit(makesurface, text_rect)
             else:
+                #if player failed to make a new highscore
                 font = pygame.font.match_font('arial')
                 fonter = pygame.font.Font(font, 43)
                 makesurface = fonter.render(str(high_score), True, (255, 255, 0))
