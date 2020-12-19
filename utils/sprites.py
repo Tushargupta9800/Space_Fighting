@@ -232,20 +232,108 @@ def printhistory():
         explosionsprite.draw(win)
         pygame.display.flip()
         pygame.display.update()
+
+def updateScoreToBackend(score,data):
+    special_characters = "{}[]|':\`~;.!@#$%^&*()-+?_=,<>/"
+    isupdate = 0
+    wait = True
+    ignite = pygame.time.get_ticks()
+    text_font = pygame.font.SysFont(None, 30)
+    text = ""
+    input_active = True
+    while wait:
+        win.blit(bk, (0,0))
+        win.blit(back, (20,20))
+        win.blit(update, (width/2-45, height - 80))
+        writeonscreen("Enter Your Name",width/2, 40, 40)
+        writeonscreen("Your Score: " + str(score),width/2,150,50)
+        for i in range (10):
+            writeonscreen(str(i+1) + " - " + data[i]["name"] + " : " + str(data[i]["score"]),width/2,i*30 + 200, 30)
+            
+        clock.tick(60)
+        for event in pygame.event.get():
+            if event.type == pygame.KEYDOWN and input_active:
+                if event.key == pygame.K_RETURN:
+                    input_active = False
+                elif event.key == pygame.K_BACKSPACE:
+                    text =  text[:-1]
+                else:
+                    if len(text) <= 30:
+                        text += event.unicode
+                        if any(c in special_characters for c in text):
+                            text =  text[:-1]
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                x, y = pygame.mouse.get_pos()
+                if x > width/2-45 and x < width/2-45+90 and y > height-80 and y < height-80+40:
+                    sendScore(text,score)
+                    isupdate = 1
+                    wait = False
+                if x > 20 and x < 85 and y > 20 and y < 85:
+                    wait = False
+            if event.type == pygame.QUIT:
+                pygame.quit()
+        if pygame.time.get_ticks() - ignite > 500:
+            makeexplosion((random.randrange(50, 450), random.randrange(50, 550)), 'lg', '')
+            ignite = pygame.time.get_ticks()
+        text_surf = text_font.render(text, True, (255, 0, 0))
+        text_rect = text_surf.get_rect()
+        text_rect.center = (width/2, 100)
+        win.blit(text_surf, text_rect)
+        explosionsprite.update()
+        explosionsprite.draw(win)
+        pygame.display.flip()
+        pygame.display.update()
+
+    if isupdate == 0:
+        return False
+    else:
+        return True
+
+def WorldScores(data):
+    wait = True
+    ignite = pygame.time.get_ticks()
+    while wait:
+        win.blit(bk, (0,0))
+        win.blit(back, (20,20))
+        writeonscreen("High Scores",width/2,60,70)
+        for i in range (10):
+            writeonscreen(str(i+1) + " - " + data[i]["name"] + " : " + str(data[i]["score"]),width/2,i*35 + 150, 35)
+            
+        clock.tick(60)
+        
+        for event in pygame.event.get():
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                x, y = pygame.mouse.get_pos()
+                if x > 20 and x < 85 and y > 20 and y < 85:
+                    wait = False
+            if event.type == pygame.QUIT:
+                pygame.quit()
+        if pygame.time.get_ticks() - ignite > 500:
+            makeexplosion((random.randrange(50, 450), random.randrange(50, 550)), 'lg', '')
+            ignite = pygame.time.get_ticks()
+        explosionsprite.update()
+        explosionsprite.draw(win)
+        pygame.display.flip()
+        pygame.display.update()
+    
         
 def showmenu(score, play, player):
+    didImadeAHighScore = 0
+    fp = open("data/score.txt", "r")
+    high_score = fp.read()
+    high_score = int(high_score, base = 10)
+    fp.close()
     internet = checkInternet()
-    #if internet == 1:
-        #data = getall()
+    if internet == 1:
+        data = getall()
+        if data[9]["score"] <= score:
+            didImadeAHighScore = 1;
+            
     wait = True
     ignite = pygame.time.get_ticks()
     while wait:
         win.blit(bk, (0,0))
         writeonscreen("Space Fighting", width/2, 40, 60)
-        fp = open("data/score.txt", "r")
-        high_score = fp.read()
-        high_score = int(high_score, base = 10)
-        fp.close()
         if play:
             if high_score <= score:
                 fp = open("data/score.txt", "w+")
@@ -255,10 +343,12 @@ def showmenu(score, play, player):
                 writeonscreen("Congrats! You made a new High Score", width/2, 230, 28)
                 high_score = score
                 writeonscreen("Your score: ", width/2 - 15, 280, 50)
-                if data[9]["score"] <= score:
-                    writeonscreen("Congrats you have made a World Score", width/2, 335, 25)
-                    writeonscreen("_____________________________________", width/2, 340, 25)
-                    writeonscreen("_____________________________________", width/2, 335, 25)
+                if didImadeAHighScore == 1:
+                    writeonscreen("Congrats you have made a World Score", width/2-5, 335, 25)
+                    writeonscreen("_____________________________________", width/2-5, 340, 25)
+                    writeonscreen("_____________________________________", width/2-5, 335, 25)
+                    win.blit(upload, (width - 60, 305));
+                    #updateScoreToBackend();
                 font = pygame.font.match_font('arial')
                 fonter = pygame.font.Font(font, 45)
                 makesurface = fonter.render(str(score), True, (255, 255, 0))
@@ -275,10 +365,12 @@ def showmenu(score, play, player):
                 text_rect.centery = 250
                 writeonscreen("Better Luck Next Time", width/2, 200, 40)
                 writeonscreen("Highscore: ", width/2 - 35, 250, 40)
-                if data[9]["score"] <= score:
-                    writeonscreen("Congrats you have made a World Score", width/2, 340, 25)
+                if didImadeAHighScore == 1:
+                    writeonscreen("Congrats you Still made a World Score", width/2, 340, 25)
                     writeonscreen("_____________________________________", width/2, 340, 25)
                     writeonscreen("_____________________________________", width/2, 345, 25)
+                    win.blit(upload, (width - 60, 305));
+                    #updateScoreToBackend();
                 win.blit(makesurface, text_rect)
                 writeonscreen("Your score: ", width/2 - 35, 300, 40)
                 makesurface = fonter.render(str(score), True, (255, 0, 255))
@@ -303,6 +395,8 @@ def showmenu(score, play, player):
         win.blit(enemyimg[0], (135, 92))
         win.blit(enemyimg[1], (205, 85))
         win.blit(enemyimg[2], (290, 90))
+        win.blit(highscore,(50,450))
+        writeonscreen("Highscores",70,500, 20)
         win.blit(speaker, (30,100))
         win.blit(history, (width - 100, 85))
         if player.music == 0:
@@ -324,6 +418,13 @@ def showmenu(score, play, player):
         for event in pygame.event.get():
             if event.type == pygame.MOUSEBUTTONDOWN:
                 x, y = pygame.mouse.get_pos()
+                if internet == 1 and x > 50 and x < 90 and y > 450 and y < 490:
+                    WorldScores(data)
+                if didImadeAHighScore == 1 and x > width - 60 and x < width - 20 and y > 305 and y < 345:
+                    whatHappened = updateScoreToBackend(score,data)
+                    if whatHappened:
+                        data = getall()
+                        play = False
                 if x > width - 100 and x < width - 20 and y > 85 and y < 175:
                     printhistory()
                 if x > 30 and x < 85 and y > 90 and y < 140:

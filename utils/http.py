@@ -1,7 +1,7 @@
 import requests
 
 def getall():
-    geturl = "http://localhost:3000/getScore"
+    geturl = "https://spacefightingbackend.herokuapp.com/getScore"
     PARAMS = {'kuch-bhi':'kuch-bhi'}
     response = requests.get(url = geturl, params = PARAMS)
     data = response.json()
@@ -13,7 +13,7 @@ def getall():
 
 
 def sendScore(name, score):
-    sendurl = "http://localhost:3000/addScore/"+str(name)+"/"+str(score)
+    sendurl = "https://spacefightingbackend.herokuapp.com/addScore/"+str(name)+"/"+str(score)
     print(sendurl)
     PARAMS = {
         'name': name,
