@@ -1,5 +1,6 @@
 from utils.widgets import*
 
+#This is just the history of the game space invasion
 def historytxt():
     writeonscreen("Their are many games related to space fighting few are mentioned above", width/2, 370, 10)
     writeonscreen("Space Invaders: is a 1978 arcade game created by Tomohiro Nishikado.", width/2, 370 + 12, 10)
